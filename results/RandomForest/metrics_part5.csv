@@ -1,0 +1,3 @@
+model,mse,train_time_s
+Model C (64 dims),1.9483,0.942
+Model C + PCA (20 dims),2.0047,0.6

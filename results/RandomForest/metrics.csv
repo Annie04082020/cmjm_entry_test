@@ -1,0 +1,4 @@
+model,mse
+Model A (cell only),10.5935
+Model B (drug only),3.2744
+Model C (cell + drug),1.9483

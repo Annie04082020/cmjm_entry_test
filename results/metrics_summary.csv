@@ -1,0 +1,5 @@
+model,mse,train_time_s
+RF  - Model C (64 dims),1.9483,0.942
+RF  - Model C + PCA (20 dims),2.0047,0.6
+LR  - Model C (64 dims),1.8294,0.0085
+LR  - Model C + PCA (20 dims),1.5097,0.0538

@@ -49,46 +49,56 @@
 
 ```mermaid
 flowchart TD
-    subgraph Raw_Data [原始輸入檔案 (data/)]
-        TrainRaw[train.csv<br>503 rows × 4 cols]
-        TestRaw[test.csv<br>100 rows × 3 cols]
-        CellRaw[global_cell_embeddings.csv<br>360 rows × 33 cols]
-        DrugRaw[drug_embeddings.csv<br>208 rows × 33 cols]
+    subgraph Raw_Data ["原始輸入檔案 (data/)"]
+        TrainRaw["train.csv<br>503 rows × 4 cols"]
+        TestRaw["test.csv<br>100 rows × 3 cols"]
+        CellRaw["global_cell_embeddings.csv<br>360 rows × 33 cols"]
+        DrugRaw["drug_embeddings.csv<br>208 rows × 33 cols"]
     end
 
-    subgraph QC_Cleaning [Part 3 品質控管與清洗]
-        DupFix[1. 刪除 3 筆完全重複樣本 → 500 rows]
-        StripFix[2. drug_id 移除尾端空白 .str.strip()]
-        ImputeFix[3. cell_emb 欄位平均值填補 Mean Imputation]
-        DropTestFix[4. test 排除 2 筆無 Embedding 細胞 → 98 rows]
+    subgraph QC_Cleaning ["Part 3 品質控管與清洗"]
+        DupFix["1. 刪除 3 筆完全重複樣本 → 500 rows"]
+        StripFix["2. drug_id 移除尾端空白 .str.strip()"]
+        ImputeFix["3. cell_emb 欄位平均值填補 Mean Imputation"]
+        DropTestFix["4. test 排除 2 筆無 Embedding 細胞 → 98 rows"]
     end
 
-    subgraph Feature_Tables [Part 2 特徵表建立 (results/)]
-        TrainProc[train_processed.csv<br>500 rows × 68 cols<br>(4 id/target + 64 features)]
-        TestProc[test_processed.csv<br>98 rows × 67 cols<br>(3 id + 64 features)]
+    subgraph Feature_Tables ["Part 2 特徵表建立 (results/)"]
+        TrainProc["train_processed.csv<br>500 rows × 68 cols<br>(4 id/target + 64 features)"]
+        TestProc["test_processed.csv<br>98 rows × 67 cols<br>(3 id + 64 features)"]
     end
 
-    subgraph Modeling [Part 4 & 5 建模與評估]
-        Split[80/20 Train/Val Split (400 / 100 筆)]
-        ModelA[Model A: Cell Only (32 dims)]
-        ModelB[Model B: Drug Only (32 dims)]
-        ModelC[Model C: Cell + Drug (64 dims)]
-        ModelPCA[Model C + PCA (20 dims)]
+    subgraph Modeling ["Part 4 & 5 建模與評估"]
+        Split["80/20 Train/Val Split (400 / 100 筆)"]
+        ModelA["Model A: Cell Only (32 dims)"]
+        ModelB["Model B: Drug Only (32 dims)"]
+        ModelC["Model C: Cell + Drug (64 dims)"]
+        ModelPCA["Model C + PCA (20 dims)"]
     end
 
-    subgraph Inference [Part 6 測試集預測]
-        TestPred[test_predictions.csv<br>98 筆預測值 & 泛化評估]
+    subgraph Inference ["Part 6 測試集預測"]
+        TestPred["test_predictions.csv<br>98 筆預測值 & 泛化評估"]
     end
 
-    TrainRaw --> DupFix --> StripFix --> TrainProc
-    CellRaw --> ImputeFix --> TrainProc
+    TrainRaw --> DupFix
+    DupFix --> StripFix
+    StripFix --> TrainProc
+    CellRaw --> ImputeFix
+    ImputeFix --> TrainProc
     DrugRaw --> TrainProc
 
-    TestRaw --> StripFix --> DropTestFix --> TestProc
+    TestRaw --> StripFix
+    StripFix --> DropTestFix
+    DropTestFix --> TestProc
     ImputeFix --> TestProc
     DrugRaw --> TestProc
 
-    TrainProc --> Split --> ModelA & ModelB & ModelC & ModelPCA
+    TrainProc --> Split
+    Split --> ModelA
+    Split --> ModelB
+    Split --> ModelC
+    Split --> ModelPCA
+
     ModelC --> TestPred
     TestProc --> TestPred
 ```

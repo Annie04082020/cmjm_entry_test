@@ -1,0 +1,4 @@
+model,mse,train_time_s
+Model A (cell only),10.2976,0.0694
+Model B (drug only),2.8734,0.0105
+Model C (cell + drug),1.8294,0.0165

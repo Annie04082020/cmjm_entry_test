@@ -11,7 +11,7 @@ Used Antigravity (Claude Sonnet 4.6, Gemini 3.8 Flash) to help write and debug P
 - Check results
 - Discuss and analyse the results with antigravity
 
-## Breif Data Understanding (before processing and discussion)
+## Brief Data Understanding (before processing and discussion)
 
 - 大致看起來像是細胞型態跟藥物各種組合的實驗數據，但我看不懂實際上這些名詞跟數字代表甚麼意思，未來兩年會再多了解這方面的知識
 
@@ -20,7 +20,7 @@ Used Antigravity (Claude Sonnet 4.6, Gemini 3.8 Flash) to help write and debug P
 
 - 所以實際上 AI 拿來訓練用的東西會分成32(cell embedding)+32(drug embedding)，總共 64 欄
 
-- 同時也會需要額外一個欄位，用來區分原本是 test 還是 train 還是 validation 的資料，才不會讓模型學到原本是 test 的資料
+- 同時也會需要額外一個欄位，用來區分原本是 test 還是 train 還是 validation 的資料，才不會讓模型學到原本是 test 的資料（但後續實際處理時，發現 val 可以在記憶體中動態切分，實際上不需要在特徵表內常駐此欄位）
 
 ## Decisions
 
@@ -36,7 +36,7 @@ Used Antigravity (Claude Sonnet 4.6, Gemini 3.8 Flash) to help write and debug P
 欄位分別是 sample_id, cell_line_id, drug_id, response
 - Test 共有100筆、3欄資料
 欄位分別是 sample_id, cell_line_id, drug_id
-- cell embedding 有360筆、34欄資料
+- cell embedding 有360筆、33欄資料
 欄位分別是 cell_line_id 跟其他32維度的資料
 - drug embedding 有208筆、33欄資料
 欄位分別是 drug_id 跟其他32維度的資料
@@ -48,7 +48,9 @@ cell_line_id 和 drug_id 為查表內容，故在模型輸入時會被替換成3
 
 ![](figures/fig_id_overlap_pie.png)
 
-- 資料集特徵: train 清理後樣本數共 500 筆，其中cell 共 328 種，test 共 98 筆，drug 共 197 種；test 清理後樣本數共 98 筆，其中 cell 有 89 種，drug 84 種。
+- 資料集特徵:
+  - train 清理後樣本數共 500 筆，其中 cell 共 328 種，drug 共 197 種；
+  - test 清理後樣本數共 98 筆，其中 cell 有 89 種，drug 有 84 種。
 - 平均每種樣本數並不多，並且有部分種類只存在於 test 或是 train中，因此訓練結果非常考驗模型的泛化能力
 
 #### Data processing

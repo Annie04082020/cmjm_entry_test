@@ -90,6 +90,8 @@ cell_line_id 和 drug_id 為查表內容，故在模型輸入時會被替換成3
 
 #### PCA Dimension Reduction Experiment
 
+[Summary](results/metrics_summary.csv)
+
 | 模型 | 特徵維度 | 驗證集 MSE | 訓練時間 (秒) |
 |---|---|---|---|
 | **RF - Model C (原版)** | 64 維 | 1.9483 | 0.942 |
